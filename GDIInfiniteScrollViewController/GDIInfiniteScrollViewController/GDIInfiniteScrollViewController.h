@@ -7,20 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GDITouchProxyView.h"
 
 @protocol GDIInfiniteScrollViewControllerDataSource, GDIInfiniteScrollViewControllerDelegate;
 
-@interface GDIInfiniteScrollViewController : UIViewController
+@interface GDIInfiniteScrollViewController : UIViewController <GDITouchProxyViewDelegate>
 
 @property (weak, nonatomic) NSObject <GDIInfiniteScrollViewControllerDataSource> *dataSource;
 @property (weak, nonatomic) NSObject <GDIInfiniteScrollViewControllerDelegate> *delegate;
 
-- (id)initWithDataSource:(NSObject <GDIInfiniteScrollViewControllerDelegate> *)dataSource;
+- (id)initWithDataSource:(NSObject <GDIInfiniteScrollViewControllerDataSource> *)dataSource;
+
+- (void)reloadData;
 
 @end
 
 
 @protocol GDIInfiniteScrollViewControllerDataSource
+- (UIView *)infiniteScrollViewController:(GDIInfiniteScrollViewController *)controller viewForIndex:(NSUInteger)index;
+- (NSUInteger)numberOfViewsForInfiniteScrollViewController:(GDIInfiniteScrollViewController *)controller;
 @end
 
 @protocol GDIInfiniteScrollViewControllerDelegate

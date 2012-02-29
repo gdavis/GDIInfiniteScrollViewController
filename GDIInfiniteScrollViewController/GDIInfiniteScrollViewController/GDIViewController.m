@@ -7,8 +7,10 @@
 //
 
 #import "GDIViewController.h"
+#import "UIColor+GDIAdditions.h"
 
 @implementation GDIViewController
+@synthesize scrollViewController;
 
 - (void)didReceiveMemoryWarning
 {
@@ -22,6 +24,10 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    self.scrollViewController = [[GDIInfiniteScrollViewController alloc] initWithDataSource:self];
+    self.scrollViewController.view.frame = CGRectMake(100, 400, self.view.frame.size.width-200, 100);
+    [self.view addSubview:self.scrollViewController.view];
 }
 
 - (void)viewDidUnload
@@ -31,30 +37,25 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+
+- (UIView *)infiniteScrollViewController:(GDIInfiniteScrollViewController *)controller viewForIndex:(NSUInteger)index
 {
-    [super viewWillAppear:animated];
+    NSLog(@"view for index: %i", index);
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 100)];
+    view.backgroundColor = [UIColor randomColorWithAlpha:.5];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:view.bounds];
+    label.backgroundColor = [UIColor clearColor];
+    label.text = [NSString stringWithFormat:@"View %i", index];
+    [view addSubview:label];
+    
+    return view;
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
 
-- (void)viewWillDisappear:(BOOL)animated
+- (NSUInteger)numberOfViewsForInfiniteScrollViewController:(GDIInfiniteScrollViewController *)controller
 {
-	[super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return YES;
+    return 10;
 }
 
 @end

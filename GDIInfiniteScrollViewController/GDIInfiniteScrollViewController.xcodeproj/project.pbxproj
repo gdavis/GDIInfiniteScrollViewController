@@ -21,6 +21,9 @@
 		777041F714FEB15600A41372 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 777041F514FEB15600A41372 /* InfoPlist.strings */; };
 		777041FA14FEB15600A41372 /* GDIInfiniteScrollViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 777041F914FEB15600A41372 /* GDIInfiniteScrollViewControllerTests.m */; };
 		7770420614FEB1A000A41372 /* GDIInfiniteScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7770420514FEB1A000A41372 /* GDIInfiniteScrollViewController.m */; };
+		7770420D14FEB42200A41372 /* GDITouchProxyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7770420C14FEB42200A41372 /* GDITouchProxyView.m */; };
+		7770421814FEE52300A41372 /* UIView+GDIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7770421714FEE52300A41372 /* UIView+GDIAdditions.m */; };
+		7770421B14FEE5BD00A41372 /* UIColor+GDIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7770421A14FEE5BD00A41372 /* UIColor+GDIAdditions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +58,12 @@
 		777041F914FEB15600A41372 /* GDIInfiniteScrollViewControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GDIInfiniteScrollViewControllerTests.m; sourceTree = "<group>"; };
 		7770420414FEB1A000A41372 /* GDIInfiniteScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDIInfiniteScrollViewController.h; sourceTree = "<group>"; };
 		7770420514FEB1A000A41372 /* GDIInfiniteScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDIInfiniteScrollViewController.m; sourceTree = "<group>"; };
+		7770420B14FEB42200A41372 /* GDITouchProxyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDITouchProxyView.h; sourceTree = "<group>"; };
+		7770420C14FEB42200A41372 /* GDITouchProxyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDITouchProxyView.m; sourceTree = "<group>"; };
+		7770421614FEE52300A41372 /* UIView+GDIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+GDIAdditions.h"; sourceTree = "<group>"; };
+		7770421714FEE52300A41372 /* UIView+GDIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+GDIAdditions.m"; sourceTree = "<group>"; };
+		7770421914FEE5BD00A41372 /* UIColor+GDIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+GDIAdditions.h"; sourceTree = "<group>"; };
+		7770421A14FEE5BD00A41372 /* UIColor+GDIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+GDIAdditions.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +129,8 @@
 				777041E014FEB15600A41372 /* GDIViewController.h */,
 				777041E114FEB15600A41372 /* GDIViewController.m */,
 				777041E314FEB15600A41372 /* GDIViewController.xib */,
+				7770421914FEE5BD00A41372 /* UIColor+GDIAdditions.h */,
+				7770421A14FEE5BD00A41372 /* UIColor+GDIAdditions.m */,
 				777041D514FEB15600A41372 /* Supporting Files */,
 			);
 			path = GDIInfiniteScrollViewController;
@@ -160,6 +171,10 @@
 			children = (
 				7770420414FEB1A000A41372 /* GDIInfiniteScrollViewController.h */,
 				7770420514FEB1A000A41372 /* GDIInfiniteScrollViewController.m */,
+				7770420B14FEB42200A41372 /* GDITouchProxyView.h */,
+				7770420C14FEB42200A41372 /* GDITouchProxyView.m */,
+				7770421614FEE52300A41372 /* UIView+GDIAdditions.h */,
+				7770421714FEE52300A41372 /* UIView+GDIAdditions.m */,
 			);
 			name = "GDI Infinite Scroll View Controller";
 			sourceTree = "<group>";
@@ -274,6 +289,9 @@
 				777041DF14FEB15600A41372 /* GDIAppDelegate.m in Sources */,
 				777041E214FEB15600A41372 /* GDIViewController.m in Sources */,
 				7770420614FEB1A000A41372 /* GDIInfiniteScrollViewController.m in Sources */,
+				7770420D14FEB42200A41372 /* GDITouchProxyView.m in Sources */,
+				7770421814FEE52300A41372 /* UIView+GDIAdditions.m in Sources */,
+				7770421B14FEE5BD00A41372 /* UIColor+GDIAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
