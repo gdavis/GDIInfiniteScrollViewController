@@ -37,6 +37,8 @@
 - (NSUInteger)indexOfPrevView;
 - (NSUInteger)indexOfNextView;
 
+- (NSUInteger)adjustedCircularIndex:(NSInteger)index withCount:(NSUInteger)count;
+
 @end
 
 
@@ -79,6 +81,7 @@
     self.view = touchView;
     touchView.backgroundColor = [UIColor lightGrayColor];
     [touchView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
+    [touchView becomeFirstResponder];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -142,7 +145,7 @@
     }
     
     self.indexOfLeftView = 0;
-    self.indexOfRightView = i;
+    self.indexOfRightView = i-1;
 }
 
 
@@ -208,6 +211,7 @@
         
         [_currentViews removeObject:view];
         [view removeFromSuperview];
+        self.indexOfLeftView = [self adjustedCircularIndex:self.indexOfLeftView+1 withCount:_numberOfViews];
         
         view = [_currentViews objectAtIndex:0];
         
@@ -219,6 +223,7 @@
         
         [_currentViews removeObject:view];
         [view removeFromSuperview];
+        self.indexOfRightView = [self adjustedCircularIndex:self.indexOfRightView-1 withCount:_numberOfViews];
         
         view = [_currentViews lastObject];
     }
@@ -251,7 +256,7 @@
         [self.view addSubview:newView];
         [_currentViews addObject:newView];
         
-        self.indexOfLeftView = viewIndex;
+        self.indexOfRightView = viewIndex;
         view = newView;
     }
 }
@@ -259,20 +264,25 @@
 
 - (NSUInteger)indexOfPrevView
 {
-    NSInteger viewIndex = self.indexOfLeftView - 1;
-    if (viewIndex < 0) {
-        viewIndex = _numberOfViews - 1;
-    }
-    return viewIndex;
+    return [self adjustedCircularIndex:self.indexOfLeftView - 1 withCount:_numberOfViews];
 }
+
 
 - (NSUInteger)indexOfNextView
 {
-    NSInteger viewIndex = self.indexOfLeftView + 1;
-    if (viewIndex >= _numberOfViews) {
-        viewIndex = 0;
+    return [self adjustedCircularIndex:self.indexOfRightView + 1 withCount:_numberOfViews];
+}
+
+
+- (NSUInteger)adjustedCircularIndex:(NSInteger)index withCount:(NSUInteger)count
+{
+    if (index < 0) {
+        index = count - 1;
     }
-    return viewIndex;
+    if (index >= count) {
+        index = 0;
+    }
+    return index;
 }
 
 #pragma mark - Nearest View Methods

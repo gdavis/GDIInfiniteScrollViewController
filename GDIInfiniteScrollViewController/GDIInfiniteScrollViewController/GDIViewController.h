@@ -13,4 +13,6 @@
 
 @property (strong, nonatomic) GDIInfiniteScrollViewController *scrollViewController;
 
+- (void)handleButtonTouch;
+
 @end

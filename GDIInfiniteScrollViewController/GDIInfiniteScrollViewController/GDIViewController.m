@@ -44,12 +44,23 @@
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 100)];
     view.backgroundColor = [UIColor randomColorWithAlpha:.5];
     
-    UILabel *label = [[UILabel alloc] initWithFrame:view.bounds];
-    label.backgroundColor = [UIColor clearColor];
-    label.text = [NSString stringWithFormat:@"View %i", index];
-    [view addSubview:label];
+//    UILabel *label = [[UILabel alloc] initWithFrame:view.bounds];
+//    label.backgroundColor = [UIColor clearColor];
+//    label.text = [NSString stringWithFormat:@"View %i", index];
+//    [view addSubview:label];
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [button setTitle:[NSString stringWithFormat:@"View %i", index] forState:UIControlStateNormal];
+    button.frame = CGRectMake(10, 10, 230, 80);
+    [button addTarget:self action:@selector(handleButtonTouch) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:button];
     
     return view;
+}
+
+- (void)handleButtonTouch
+{
+    NSLog(@"button touch");
 }
 
 
