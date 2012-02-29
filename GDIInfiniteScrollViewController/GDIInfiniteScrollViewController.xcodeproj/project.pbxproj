@@ -1,0 +1,460 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		777041CF14FEB15600A41372 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777041CE14FEB15600A41372 /* UIKit.framework */; };
+		777041D114FEB15600A41372 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777041D014FEB15600A41372 /* Foundation.framework */; };
+		777041D314FEB15600A41372 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777041D214FEB15600A41372 /* CoreGraphics.framework */; };
+		777041D914FEB15600A41372 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 777041D714FEB15600A41372 /* InfoPlist.strings */; };
+		777041DB14FEB15600A41372 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 777041DA14FEB15600A41372 /* main.m */; };
+		777041DF14FEB15600A41372 /* GDIAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 777041DE14FEB15600A41372 /* GDIAppDelegate.m */; };
+		777041E214FEB15600A41372 /* GDIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 777041E114FEB15600A41372 /* GDIViewController.m */; };
+		777041E514FEB15600A41372 /* GDIViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 777041E314FEB15600A41372 /* GDIViewController.xib */; };
+		777041ED14FEB15600A41372 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777041EC14FEB15600A41372 /* SenTestingKit.framework */; };
+		777041EE14FEB15600A41372 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777041CE14FEB15600A41372 /* UIKit.framework */; };
+		777041EF14FEB15600A41372 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777041D014FEB15600A41372 /* Foundation.framework */; };
+		777041F714FEB15600A41372 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 777041F514FEB15600A41372 /* InfoPlist.strings */; };
+		777041FA14FEB15600A41372 /* GDIInfiniteScrollViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 777041F914FEB15600A41372 /* GDIInfiniteScrollViewControllerTests.m */; };
+		7770420614FEB1A000A41372 /* GDIInfiniteScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7770420514FEB1A000A41372 /* GDIInfiniteScrollViewController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		777041F014FEB15600A41372 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 777041C114FEB15500A41372 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 777041C914FEB15500A41372;
+			remoteInfo = GDIInfiniteScrollViewController;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		777041CA14FEB15500A41372 /* GDIInfiniteScrollViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GDIInfiniteScrollViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		777041CE14FEB15600A41372 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		777041D014FEB15600A41372 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		777041D214FEB15600A41372 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		777041D614FEB15600A41372 /* GDIInfiniteScrollViewController-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GDIInfiniteScrollViewController-Info.plist"; sourceTree = "<group>"; };
+		777041D814FEB15600A41372 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		777041DA14FEB15600A41372 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		777041DC14FEB15600A41372 /* GDIInfiniteScrollViewController-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GDIInfiniteScrollViewController-Prefix.pch"; sourceTree = "<group>"; };
+		777041DD14FEB15600A41372 /* GDIAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GDIAppDelegate.h; sourceTree = "<group>"; };
+		777041DE14FEB15600A41372 /* GDIAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GDIAppDelegate.m; sourceTree = "<group>"; };
+		777041E014FEB15600A41372 /* GDIViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GDIViewController.h; sourceTree = "<group>"; };
+		777041E114FEB15600A41372 /* GDIViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GDIViewController.m; sourceTree = "<group>"; };
+		777041E414FEB15600A41372 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GDIViewController.xib; sourceTree = "<group>"; };
+		777041EB14FEB15600A41372 /* GDIInfiniteScrollViewControllerTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GDIInfiniteScrollViewControllerTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		777041EC14FEB15600A41372 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		777041F414FEB15600A41372 /* GDIInfiniteScrollViewControllerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GDIInfiniteScrollViewControllerTests-Info.plist"; sourceTree = "<group>"; };
+		777041F614FEB15600A41372 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		777041F814FEB15600A41372 /* GDIInfiniteScrollViewControllerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GDIInfiniteScrollViewControllerTests.h; sourceTree = "<group>"; };
+		777041F914FEB15600A41372 /* GDIInfiniteScrollViewControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GDIInfiniteScrollViewControllerTests.m; sourceTree = "<group>"; };
+		7770420414FEB1A000A41372 /* GDIInfiniteScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDIInfiniteScrollViewController.h; sourceTree = "<group>"; };
+		7770420514FEB1A000A41372 /* GDIInfiniteScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDIInfiniteScrollViewController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		777041C714FEB15500A41372 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				777041CF14FEB15600A41372 /* UIKit.framework in Frameworks */,
+				777041D114FEB15600A41372 /* Foundation.framework in Frameworks */,
+				777041D314FEB15600A41372 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		777041E714FEB15600A41372 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				777041ED14FEB15600A41372 /* SenTestingKit.framework in Frameworks */,
+				777041EE14FEB15600A41372 /* UIKit.framework in Frameworks */,
+				777041EF14FEB15600A41372 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		777041BF14FEB15500A41372 = {
+			isa = PBXGroup;
+			children = (
+				777041D414FEB15600A41372 /* GDIInfiniteScrollViewController */,
+				777041F214FEB15600A41372 /* GDIInfiniteScrollViewControllerTests */,
+				777041CD14FEB15600A41372 /* Frameworks */,
+				777041CB14FEB15500A41372 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		777041CB14FEB15500A41372 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				777041CA14FEB15500A41372 /* GDIInfiniteScrollViewController.app */,
+				777041EB14FEB15600A41372 /* GDIInfiniteScrollViewControllerTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		777041CD14FEB15600A41372 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				777041CE14FEB15600A41372 /* UIKit.framework */,
+				777041D014FEB15600A41372 /* Foundation.framework */,
+				777041D214FEB15600A41372 /* CoreGraphics.framework */,
+				777041EC14FEB15600A41372 /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		777041D414FEB15600A41372 /* GDIInfiniteScrollViewController */ = {
+			isa = PBXGroup;
+			children = (
+				7770420314FEB18700A41372 /* GDI Infinite Scroll View Controller */,
+				777041DD14FEB15600A41372 /* GDIAppDelegate.h */,
+				777041DE14FEB15600A41372 /* GDIAppDelegate.m */,
+				777041E014FEB15600A41372 /* GDIViewController.h */,
+				777041E114FEB15600A41372 /* GDIViewController.m */,
+				777041E314FEB15600A41372 /* GDIViewController.xib */,
+				777041D514FEB15600A41372 /* Supporting Files */,
+			);
+			path = GDIInfiniteScrollViewController;
+			sourceTree = "<group>";
+		};
+		777041D514FEB15600A41372 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				777041D614FEB15600A41372 /* GDIInfiniteScrollViewController-Info.plist */,
+				777041D714FEB15600A41372 /* InfoPlist.strings */,
+				777041DA14FEB15600A41372 /* main.m */,
+				777041DC14FEB15600A41372 /* GDIInfiniteScrollViewController-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		777041F214FEB15600A41372 /* GDIInfiniteScrollViewControllerTests */ = {
+			isa = PBXGroup;
+			children = (
+				777041F814FEB15600A41372 /* GDIInfiniteScrollViewControllerTests.h */,
+				777041F914FEB15600A41372 /* GDIInfiniteScrollViewControllerTests.m */,
+				777041F314FEB15600A41372 /* Supporting Files */,
+			);
+			path = GDIInfiniteScrollViewControllerTests;
+			sourceTree = "<group>";
+		};
+		777041F314FEB15600A41372 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				777041F414FEB15600A41372 /* GDIInfiniteScrollViewControllerTests-Info.plist */,
+				777041F514FEB15600A41372 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7770420314FEB18700A41372 /* GDI Infinite Scroll View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7770420414FEB1A000A41372 /* GDIInfiniteScrollViewController.h */,
+				7770420514FEB1A000A41372 /* GDIInfiniteScrollViewController.m */,
+			);
+			name = "GDI Infinite Scroll View Controller";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		777041C914FEB15500A41372 /* GDIInfiniteScrollViewController */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 777041FD14FEB15600A41372 /* Build configuration list for PBXNativeTarget "GDIInfiniteScrollViewController" */;
+			buildPhases = (
+				777041C614FEB15500A41372 /* Sources */,
+				777041C714FEB15500A41372 /* Frameworks */,
+				777041C814FEB15500A41372 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GDIInfiniteScrollViewController;
+			productName = GDIInfiniteScrollViewController;
+			productReference = 777041CA14FEB15500A41372 /* GDIInfiniteScrollViewController.app */;
+			productType = "com.apple.product-type.application";
+		};
+		777041EA14FEB15600A41372 /* GDIInfiniteScrollViewControllerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7770420014FEB15600A41372 /* Build configuration list for PBXNativeTarget "GDIInfiniteScrollViewControllerTests" */;
+			buildPhases = (
+				777041E614FEB15600A41372 /* Sources */,
+				777041E714FEB15600A41372 /* Frameworks */,
+				777041E814FEB15600A41372 /* Resources */,
+				777041E914FEB15600A41372 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				777041F114FEB15600A41372 /* PBXTargetDependency */,
+			);
+			name = GDIInfiniteScrollViewControllerTests;
+			productName = GDIInfiniteScrollViewControllerTests;
+			productReference = 777041EB14FEB15600A41372 /* GDIInfiniteScrollViewControllerTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		777041C114FEB15500A41372 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 777041C414FEB15500A41372 /* Build configuration list for PBXProject "GDIInfiniteScrollViewController" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 777041BF14FEB15500A41372;
+			productRefGroup = 777041CB14FEB15500A41372 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				777041C914FEB15500A41372 /* GDIInfiniteScrollViewController */,
+				777041EA14FEB15600A41372 /* GDIInfiniteScrollViewControllerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		777041C814FEB15500A41372 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				777041D914FEB15600A41372 /* InfoPlist.strings in Resources */,
+				777041E514FEB15600A41372 /* GDIViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		777041E814FEB15600A41372 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				777041F714FEB15600A41372 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		777041E914FEB15600A41372 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		777041C614FEB15500A41372 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				777041DB14FEB15600A41372 /* main.m in Sources */,
+				777041DF14FEB15600A41372 /* GDIAppDelegate.m in Sources */,
+				777041E214FEB15600A41372 /* GDIViewController.m in Sources */,
+				7770420614FEB1A000A41372 /* GDIInfiniteScrollViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		777041E614FEB15600A41372 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				777041FA14FEB15600A41372 /* GDIInfiniteScrollViewControllerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		777041F114FEB15600A41372 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 777041C914FEB15500A41372 /* GDIInfiniteScrollViewController */;
+			targetProxy = 777041F014FEB15600A41372 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		777041D714FEB15600A41372 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				777041D814FEB15600A41372 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		777041E314FEB15600A41372 /* GDIViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				777041E414FEB15600A41372 /* en */,
+			);
+			name = GDIViewController.xib;
+			sourceTree = "<group>";
+		};
+		777041F514FEB15600A41372 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				777041F614FEB15600A41372 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		777041FB14FEB15600A41372 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		777041FC14FEB15600A41372 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		777041FE14FEB15600A41372 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GDIInfiniteScrollViewController/GDIInfiniteScrollViewController-Prefix.pch";
+				INFOPLIST_FILE = "GDIInfiniteScrollViewController/GDIInfiniteScrollViewController-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		777041FF14FEB15600A41372 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GDIInfiniteScrollViewController/GDIInfiniteScrollViewController-Prefix.pch";
+				INFOPLIST_FILE = "GDIInfiniteScrollViewController/GDIInfiniteScrollViewController-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		7770420114FEB15600A41372 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GDIInfiniteScrollViewController.app/GDIInfiniteScrollViewController";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GDIInfiniteScrollViewController/GDIInfiniteScrollViewController-Prefix.pch";
+				INFOPLIST_FILE = "GDIInfiniteScrollViewControllerTests/GDIInfiniteScrollViewControllerTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		7770420214FEB15600A41372 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GDIInfiniteScrollViewController.app/GDIInfiniteScrollViewController";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GDIInfiniteScrollViewController/GDIInfiniteScrollViewController-Prefix.pch";
+				INFOPLIST_FILE = "GDIInfiniteScrollViewControllerTests/GDIInfiniteScrollViewControllerTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		777041C414FEB15500A41372 /* Build configuration list for PBXProject "GDIInfiniteScrollViewController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				777041FB14FEB15600A41372 /* Debug */,
+				777041FC14FEB15600A41372 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		777041FD14FEB15600A41372 /* Build configuration list for PBXNativeTarget "GDIInfiniteScrollViewController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				777041FE14FEB15600A41372 /* Debug */,
+				777041FF14FEB15600A41372 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		7770420014FEB15600A41372 /* Build configuration list for PBXNativeTarget "GDIInfiniteScrollViewControllerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7770420114FEB15600A41372 /* Debug */,
+				7770420214FEB15600A41372 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 777041C114FEB15500A41372 /* Project object */;
+}
