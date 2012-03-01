@@ -15,6 +15,7 @@
 
 @property (weak, nonatomic) NSObject <GDIInfiniteScrollViewControllerDataSource> *dataSource;
 @property (weak, nonatomic) NSObject <GDIInfiniteScrollViewControllerDelegate> *delegate;
+@property (nonatomic) CGFloat friction;
 
 - (id)initWithDataSource:(NSObject <GDIInfiniteScrollViewControllerDataSource> *)dataSource;
 

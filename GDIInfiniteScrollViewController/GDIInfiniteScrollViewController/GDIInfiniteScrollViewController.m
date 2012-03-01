@@ -9,6 +9,8 @@
 #import "GDIInfiniteScrollViewController.h"
 #import "UIView+GDIAdditions.h"
 
+#define kAnimationInterval 1.f/60.f
+
 @interface GDIInfiniteScrollViewController()
 @property (nonatomic) NSUInteger numberOfViews;
 @property (nonatomic) CGFloat velocity;
@@ -17,6 +19,7 @@
 @property (strong, nonatomic) NSMutableArray *currentViews;
 @property (nonatomic) NSUInteger indexOfLeftView;
 @property (nonatomic) NSUInteger indexOfRightView;
+@property (strong,nonatomic) NSTimer *decelerationTimer;
 
 - (void)setDefaults;
 - (void)setDataSourceProperties;
@@ -43,7 +46,7 @@
 
 
 @implementation GDIInfiniteScrollViewController
-@synthesize dataSource, delegate;
+@synthesize dataSource, delegate, friction;
 
 @synthesize numberOfViews = _numberOfViews;
 @synthesize velocity = _velocity;
@@ -52,6 +55,7 @@
 @synthesize currentViews = _currentViews;
 @synthesize indexOfLeftView = _indexOfLeftView;
 @synthesize indexOfRightView = _indexOfRightView;
+@synthesize decelerationTimer = _decelerationTimer;
 
 - (id)initWithDataSource:(NSObject <GDIInfiniteScrollViewControllerDataSource> *)ds
 {
@@ -77,11 +81,11 @@
 {
     GDITouchProxyView *touchView = [[GDITouchProxyView alloc] initWithFrame:CGRectZero];
     touchView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    touchView.autoresizesSubviews = YES;
     touchView.delegate = self;
     self.view = touchView;
     touchView.backgroundColor = [UIColor lightGrayColor];
     [touchView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
-    [touchView becomeFirstResponder];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -120,7 +124,7 @@
 {
     _currentOffset = 0;
     _velocity = 0;
-    _currentViews = [NSMutableArray array];
+    self.friction = .95f;
 }
 
 
@@ -132,8 +136,9 @@
 
 - (void)buildViews
 {
+    _currentViews = [NSMutableArray array];
+    
     CGFloat currentWidth = 0;
-    NSLog(@"building views with num: %i, view frame: %@", _numberOfViews, NSStringFromCGRect(self.view.frame));
     int i;
     for (i=0; i < _numberOfViews && currentWidth < self.view.frameWidth; i++) {
         
@@ -156,26 +161,6 @@
     [self setDefaults];
     [self setDataSourceProperties];
     [self buildViews];
-}
-
-
-#pragma mark - Deceleration Methods
-
-- (void)beginDeceleration
-{
-    
-}
-
-
-- (void)endDeceleration
-{
-    
-}
-
-
-- (void)handleDecelerateTick
-{
-    
 }
 
 
@@ -284,6 +269,35 @@
     }
     return index;
 }
+
+
+#pragma mark - Deceleration Methods
+
+- (void)beginDeceleration
+{
+    [_decelerationTimer invalidate];
+    _decelerationTimer = [NSTimer scheduledTimerWithTimeInterval:kAnimationInterval target:self selector:@selector(handleDecelerateTick) userInfo:nil repeats:YES];
+}
+
+- (void)endDeceleration
+{
+    [_decelerationTimer invalidate];
+    _decelerationTimer = nil;
+}
+
+- (void)handleDecelerateTick
+{
+    _velocity *= self.friction;
+    
+    if ( fabsf(_velocity) < .1f) {
+        [self endDeceleration];
+//        [self scrollToNearestRowWithAnimation:YES];
+    }
+    else {
+        [self scrollContentByValue:_velocity];
+    }
+}
+
 
 #pragma mark - Nearest View Methods
 
