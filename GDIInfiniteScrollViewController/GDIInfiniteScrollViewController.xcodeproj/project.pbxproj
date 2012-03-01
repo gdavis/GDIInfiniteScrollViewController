@@ -225,6 +225,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Grant Davis Interactive, LLC";
 			};
 			buildConfigurationList = 777041C414FEB15500A41372 /* Build configuration list for PBXProject "GDIInfiniteScrollViewController" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -463,6 +464,7 @@
 				777041FF14FEB15600A41372 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7770420014FEB15600A41372 /* Build configuration list for PBXNativeTarget "GDIInfiniteScrollViewControllerTests" */ = {
 			isa = XCConfigurationList;
@@ -471,6 +473,7 @@
 				7770420214FEB15600A41372 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

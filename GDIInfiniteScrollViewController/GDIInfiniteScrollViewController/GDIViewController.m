@@ -3,7 +3,7 @@
 //  GDIInfiniteScrollViewController
 //
 //  Created by Grant Davis on 2/29/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Grant Davis Interactive, LLC. All rights reserved.
 //
 
 #import "GDIViewController.h"
@@ -40,7 +40,6 @@
 
 - (UIView *)infiniteScrollViewController:(GDIInfiniteScrollViewController *)controller viewForIndex:(NSUInteger)index
 {
-    NSLog(@"view for index: %i", index);
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 100)];
     view.backgroundColor = [UIColor randomColorWithAlpha:.5];
     
