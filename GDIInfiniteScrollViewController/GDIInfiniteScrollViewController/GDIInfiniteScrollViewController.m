@@ -19,7 +19,7 @@
 @property (strong, nonatomic) NSMutableArray *currentViews;
 @property (nonatomic) NSUInteger indexOfLeftView;
 @property (nonatomic) NSUInteger indexOfRightView;
-@property (strong,nonatomic) NSTimer *decelerationTimer;
+@property (strong, nonatomic) NSTimer *decelerationTimer;
 
 - (void)setDefaults;
 - (void)setDataSourceProperties;
@@ -35,7 +35,7 @@
 
 - (void)updateVisibleViews;
 - (void)scrollContentByValue:(CGFloat)value;
-- (void)trackTouchPoint:(CGPoint)point inView:(UIView*)view;
+- (void)trackTouchPoint:(CGPoint)point;
 
 - (NSUInteger)indexOfPrevView;
 - (NSUInteger)indexOfNextView;
@@ -79,13 +79,11 @@
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView
 {
-    GDITouchProxyView *touchView = [[GDITouchProxyView alloc] initWithFrame:CGRectZero];
-    touchView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-    touchView.autoresizesSubviews = YES;
-    touchView.delegate = self;
-    self.view = touchView;
-    touchView.backgroundColor = [UIColor lightGrayColor];
-    [touchView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectZero];
+    view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+    view.autoresizesSubviews = YES;
+    self.view = view;
+    view.backgroundColor = [UIColor lightGrayColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -94,17 +92,9 @@
     [self reloadData];
 }
 
-
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ([keyPath isEqualToString:@"frame"]) {
-        NSLog(@"view frame change to: %@", NSStringFromCGRect(self.view.frame));
-    }
 }
 
 #pragma mark - Getters / Setters
@@ -175,7 +165,7 @@
     [self updateVisibleViews];
 }
 
-- (void)trackTouchPoint:(CGPoint)point inView:(UIView*)view
+- (void)trackTouchPoint:(CGPoint)point
 {
     CGFloat delta = point.x - _lastTouchPoint.x;
     
@@ -197,6 +187,7 @@
         self.indexOfLeftView = [self adjustedCircularIndex:self.indexOfLeftView+1 withCount:_numberOfViews];
         
         view = [_currentViews objectAtIndex:0];
+        
         
     }
     
@@ -315,37 +306,56 @@
     
 }
 
-#pragma mark - Touch Proxy Delegate Methods
 
-- (void)gestureView:(GDITouchProxyView *)gv touchBeganAtPoint:(CGPoint)point
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    // reset the last point to where we start from.
-    _lastTouchPoint = point;
-    _velocity = 0;
-    
-    [self endDeceleration];
-    [self endScrollingToNearestView];
-    [self trackTouchPoint:point inView:gv];
-}
-
-
-- (void)gestureView:(GDITouchProxyView *)gv touchMovedToPoint:(CGPoint)point
-{
-    [self trackTouchPoint:point inView:gv];
-}
-
-
-- (void)gestureView:(GDITouchProxyView *)gv touchEndedAtPoint:(CGPoint)point
-{
-    if (fabsf(_velocity) < 1.f) {
-        // tap action
-        _velocity = 0.f;
-        [self selectViewAtPoint:point];
-    }
-    else {
-        // drag action
-        [self beginDeceleration];
+    if ([touches count] == 1) {
+        UITouch *touch = [touches anyObject];
+        CGPoint point = [touch locationInView:self.view];
+        
+        // reset the last point to where we start from.
+        _lastTouchPoint = point;
+        _velocity = 0;
+        
+        [self endDeceleration];
+        [self endScrollingToNearestView];
+        [self trackTouchPoint:point];
     }
 }
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{    
+    if ([touches count] == 1) {
+        UITouch *touch = [touches anyObject];
+        CGPoint point = [touch locationInView:self.view];
+        [self trackTouchPoint:point];
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if ([touches count] == 1) {
+        
+        UITouch *touch = [touches anyObject];
+        CGPoint point = [touch locationInView:self.view];
+        
+        if (fabsf(_velocity) < 1.f) {
+            // tap action
+            _velocity = 0.f;
+            [self selectViewAtPoint:point];
+        }
+        else {
+            // drag action
+            [self beginDeceleration];
+        }
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+
+}
+
 
 @end
+

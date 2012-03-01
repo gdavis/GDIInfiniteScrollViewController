@@ -53,8 +53,9 @@
     
 //    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 //    [button setTitle:[NSString stringWithFormat:@"View %i", index] forState:UIControlStateNormal];
-//    button.frame = CGRectMake(10, 10, 230, 80);
+//    button.frame = CGRectMake(20, 20, 210, 60);
 //    [button addTarget:self action:@selector(handleButtonTouch) forControlEvents:UIControlEventTouchUpInside];
+//    button.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 //    [view addSubview:button];
     
     return view;
