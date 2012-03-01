@@ -40,19 +40,22 @@
 
 - (UIView *)infiniteScrollViewController:(GDIInfiniteScrollViewController *)controller viewForIndex:(NSUInteger)index
 {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 100)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, controller.view.frame.size.height)];
     view.backgroundColor = [UIColor randomColorWithAlpha:.5];
+    view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+    view.autoresizesSubviews = YES;
     
-//    UILabel *label = [[UILabel alloc] initWithFrame:view.bounds];
-//    label.backgroundColor = [UIColor clearColor];
-//    label.text = [NSString stringWithFormat:@"View %i", index];
-//    [view addSubview:label];
+    UILabel *label = [[UILabel alloc] initWithFrame:view.bounds];
+    label.backgroundColor = [UIColor clearColor];
+    label.text = [NSString stringWithFormat:@"View %i", index];
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+    [view addSubview:label];
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [button setTitle:[NSString stringWithFormat:@"View %i", index] forState:UIControlStateNormal];
-    button.frame = CGRectMake(10, 10, 230, 80);
-    [button addTarget:self action:@selector(handleButtonTouch) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:button];
+//    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//    [button setTitle:[NSString stringWithFormat:@"View %i", index] forState:UIControlStateNormal];
+//    button.frame = CGRectMake(10, 10, 230, 80);
+//    [button addTarget:self action:@selector(handleButtonTouch) forControlEvents:UIControlEventTouchUpInside];
+//    [view addSubview:button];
     
     return view;
 }

@@ -80,7 +80,7 @@
 - (void)loadView
 {
     GDITouchProxyView *touchView = [[GDITouchProxyView alloc] initWithFrame:CGRectZero];
-    touchView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    touchView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     touchView.autoresizesSubviews = YES;
     touchView.delegate = self;
     self.view = touchView;
@@ -98,14 +98,12 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([keyPath isEqualToString:@"frame"]) {
-        NSLog(@"view frame change");
+        NSLog(@"view frame change to: %@", NSStringFromCGRect(self.view.frame));
     }
 }
 
