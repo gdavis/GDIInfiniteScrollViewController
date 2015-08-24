@@ -41,7 +41,7 @@
 
 - (UIView *)infiniteScrollViewController:(GDIInfiniteScrollViewController *)controller viewForIndex:(NSUInteger)index
 {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, controller.view.frame.size.height)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, controller.view.frame.size.height)];
     view.backgroundColor = [UIColor randomColorWithAlpha:.5];
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     view.autoresizesSubviews = YES;
@@ -70,7 +70,7 @@
 
 - (NSUInteger)numberOfViewsForInfiniteScrollViewController:(GDIInfiniteScrollViewController *)controller
 {
-    return 10;
+    return 20;
 }
 
 
