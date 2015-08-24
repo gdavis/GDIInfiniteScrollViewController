@@ -93,9 +93,11 @@ static CGFloat const Friction = 0.9f;
     UIView *view = [[UIView alloc] initWithFrame:CGRectZero];
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     view.autoresizesSubviews = YES;
-    self.view = view;
+    view.clipsToBounds = YES;
     view.backgroundColor = [UIColor lightGrayColor];
+    self.view = view;
 }
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
