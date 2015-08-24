@@ -32,6 +32,7 @@
 @end
 
 @protocol GDIInfiniteScrollViewControllerDelegate <NSObject>
-// TODO:(grant) Add methods to respond to scroll events
+@optional
 - (void)infiniteScrollViewController:(GDIInfiniteScrollViewController *)controller didSelectViewAtIndex:(NSInteger)index;
+- (void)infiniteScrollViewControllerDidScroll:(GDIInfiniteScrollViewController *)controller;
 @end

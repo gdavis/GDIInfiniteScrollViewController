@@ -81,8 +81,8 @@ static CGFloat const Friction = 0.9f;
 
 - (void)commonInit
 {
-    _scrollsToSelectedViewCenter = YES;
-    _friction = Friction;
+    self.scrollsToSelectedViewCenter = YES;
+    self.friction = Friction;
 }
 
 
@@ -114,29 +114,41 @@ static CGFloat const Friction = 0.9f;
 }
 
 
+- (void)setCurrentOffset:(CGFloat)currentOffset
+{
+    if (_currentOffset != currentOffset) {
+        _currentOffset = currentOffset;
+        
+        if ([self.delegate respondsToSelector:@selector(infiniteScrollViewControllerDidScroll:)]) {
+            [self.delegate infiniteScrollViewControllerDidScroll:self];
+        }
+    }
+}
+
+
 #pragma mark - Setup Methods
 
 - (void)resetState
 {
-    _currentOffset = 0;
-    _velocity = 0;
+    self.currentOffset = 0;
+    self.velocity = 0;
 }
 
 
 - (void)setDataSourceProperties
 {
-    _numberOfViews = [self.dataSource numberOfViewsForInfiniteScrollViewController:self];
+    self.numberOfViews = [self.dataSource numberOfViewsForInfiniteScrollViewController:self];
 }
 
 
 - (void)buildViews
 {
-    _currentViews = [NSMutableArray array];
+    self.currentViews = [NSMutableArray array];
     
     int i;
     CGFloat currentWidth = 0;
     CGFloat viewFrameWidth = CGRectGetWidth(self.view.frame);
-    for (i=0; i < _numberOfViews && currentWidth < viewFrameWidth; i++) {
+    for (i=0; i < self.numberOfViews && currentWidth < viewFrameWidth; i++) {
         
         UIView *view = [self viewForIndex:i];
         CGRect viewFrame = view.frame;
@@ -144,7 +156,7 @@ static CGFloat const Friction = 0.9f;
         view.frame = viewFrame;
         
         currentWidth += CGRectGetWidth(view.frame);
-        [_currentViews addObject:view];
+        [self.currentViews addObject:view];
         [self.view addSubview:view];
     }
     
@@ -167,9 +179,9 @@ static CGFloat const Friction = 0.9f;
 
 - (void)scrollContentByValue:(CGFloat)value
 {
-    _currentOffset += value;
+    self.currentOffset += value;
     
-    for (UIView *view in _currentViews) {
+    for (UIView *view in self.currentViews) {
         view.frameLeft += value;
     }
     
@@ -193,41 +205,41 @@ static CGFloat const Friction = 0.9f;
 
 - (void)trackTouchPoint:(CGPoint)point
 {
-    CGFloat delta = point.x - _lastTouchPoint.x;
+    CGFloat delta = point.x - self.lastTouchPoint.x;
     
     [self scrollContentByValue:delta];
     
-    _velocity = delta;
-    _lastTouchPoint = point;
+    self.velocity = delta;
+    self.lastTouchPoint = point;
 }
 
 
 - (void)updateVisibleViews
 {
     // remove views that are too far left
-    UIView *view = [_currentViews firstObject];
+    UIView *view = [self.currentViews firstObject];
     while (view.frameRight < 0) {
         
-        [_currentViews removeObject:view];
+        [self.currentViews removeObject:view];
         [view removeFromSuperview];
-        self.indexOfLeftView = [self adjustedCircularIndex:self.indexOfLeftView+1 withCount:_numberOfViews];
+        self.indexOfLeftView = [self adjustedCircularIndex:self.indexOfLeftView+1 withCount:self.numberOfViews];
         
-        view = [_currentViews firstObject];
+        view = [self.currentViews firstObject];
     }
     
     // remove views that are too far right
-    view = [_currentViews lastObject];
+    view = [self.currentViews lastObject];
     while (view.frameLeft > self.view.frameWidth) {
         
-        [_currentViews removeObject:view];
+        [self.currentViews removeObject:view];
         [view removeFromSuperview];
-        self.indexOfRightView = [self adjustedCircularIndex:self.indexOfRightView-1 withCount:_numberOfViews];
+        self.indexOfRightView = [self adjustedCircularIndex:self.indexOfRightView-1 withCount:self.numberOfViews];
         
-        view = [_currentViews lastObject];
+        view = [self.currentViews lastObject];
     }
     
     // add views to fill the left
-    view = [_currentViews firstObject];
+    view = [self.currentViews firstObject];
     while (view.frameLeft > 0) {
         
         NSUInteger viewIndex = [self indexOfPrevView];
@@ -236,14 +248,14 @@ static CGFloat const Friction = 0.9f;
         newView.frameRight = view.frameLeft;
         
         [self.view addSubview:newView];
-        [_currentViews insertObject:newView atIndex:0];
+        [self.currentViews insertObject:newView atIndex:0];
         
         self.indexOfLeftView = viewIndex;
         view = newView;
     }
     
     // add views to fill the right
-    view = [_currentViews lastObject];
+    view = [self.currentViews lastObject];
     while (view.frameRight < self.view.frameWidth) {
         
         NSUInteger viewIndex = [self indexOfNextView];
@@ -252,7 +264,7 @@ static CGFloat const Friction = 0.9f;
         newView.frameLeft = view.frameRight;
         
         [self.view addSubview:newView];
-        [_currentViews addObject:newView];
+        [self.currentViews addObject:newView];
         
         self.indexOfRightView = viewIndex;
         view = newView;
@@ -290,13 +302,13 @@ static CGFloat const Friction = 0.9f;
 
 - (NSUInteger)indexOfPrevView
 {
-    return [self adjustedCircularIndex:self.indexOfLeftView - 1 withCount:_numberOfViews];
+    return [self adjustedCircularIndex:self.indexOfLeftView - 1 withCount:self.numberOfViews];
 }
 
 
 - (NSUInteger)indexOfNextView
 {
-    return [self adjustedCircularIndex:self.indexOfRightView + 1 withCount:_numberOfViews];
+    return [self adjustedCircularIndex:self.indexOfRightView + 1 withCount:self.numberOfViews];
 }
 
 
@@ -316,21 +328,21 @@ static CGFloat const Friction = 0.9f;
 
 - (void)beginDeceleration
 {
-    [_decelerationTimer invalidate];
-    _decelerationTimer = [NSTimer scheduledTimerWithTimeInterval:AnimationInterval target:self selector:@selector(handleDecelerateTick) userInfo:nil repeats:YES];
+    [self.decelerationTimer invalidate];
+    self.decelerationTimer = [NSTimer scheduledTimerWithTimeInterval:AnimationInterval target:self selector:@selector(handleDecelerateTick) userInfo:nil repeats:YES];
 }
 
 - (void)endDeceleration
 {
-    [_decelerationTimer invalidate];
-    _decelerationTimer = nil;
+    [self.decelerationTimer invalidate];
+    self.decelerationTimer = nil;
 }
 
 - (void)handleDecelerateTick
 {
-    _velocity *= self.friction;
+    self.velocity *= self.friction;
     
-    if ( fabsf(_velocity) < .1f) {
+    if ( fabsf(self.velocity) < .1f) {
         [self endDeceleration];
         
         if (self.scrollsToSelectedViewCenter) {
@@ -338,7 +350,7 @@ static CGFloat const Friction = 0.9f;
         }
     }
     else {
-        [self scrollContentByValue:_velocity];
+        [self scrollContentByValue:self.velocity];
     }
 }
 
@@ -352,7 +364,7 @@ static CGFloat const Friction = 0.9f;
     CGFloat delta = center.x - closestView.center.x;
     
     if (fabs(delta) > 1) {
-        _velocity = 0;
+        self.velocity = 0;
         [self endDeceleration];
         [self beginScrollingWithOffsetDelta:delta];
     }
@@ -369,41 +381,41 @@ static CGFloat const Friction = 0.9f;
     CGFloat targetOffset = self.currentOffset + delta;
     CGFloat currentOffset = self.currentOffset;
     
-    _moveToIndexOffsetDelta = targetOffset - currentOffset;
-    _moveToIndexOffsetStartValue = currentOffset;
-    _moveToIndexStartTime = [NSDate date];
-    _moveToIndexOffsetDuration = [[_moveToIndexStartTime dateByAddingTimeInterval:.666f] timeIntervalSinceDate:_moveToIndexStartTime];
+    self.moveToIndexOffsetDelta = targetOffset - currentOffset;
+    self.moveToIndexOffsetStartValue = currentOffset;
+    self.moveToIndexStartTime = [NSDate date];
+    self.moveToIndexOffsetDuration = [[self.moveToIndexStartTime dateByAddingTimeInterval:.666f] timeIntervalSinceDate:self.moveToIndexStartTime];
     
-    [_moveToIndexTimer invalidate];
-    _moveToIndexTimer = [NSTimer scheduledTimerWithTimeInterval:AnimationInterval target:self selector:@selector(handleMoveToIndexTick) userInfo:nil repeats:YES];
+    [self.moveToIndexTimer invalidate];
+    self.moveToIndexTimer = [NSTimer scheduledTimerWithTimeInterval:AnimationInterval target:self selector:@selector(handleMoveToIndexTick) userInfo:nil repeats:YES];
 }
 
 
 - (void)endScrollingToNearestView
 {
-    [_moveToIndexTimer invalidate];
-    _moveToIndexTimer = nil;
+    [self.moveToIndexTimer invalidate];
+    self.moveToIndexTimer = nil;
 }
 
 
 - (void)handleMoveToIndexTick
 {
-    CGFloat currentTime = fabs([_moveToIndexStartTime timeIntervalSinceNow]);
+    CGFloat currentTime = fabs([self.moveToIndexStartTime timeIntervalSinceNow]);
     
     // stop scrolling if we are past our duration
-    if (currentTime >= _moveToIndexOffsetDuration) {
+    if (currentTime >= self.moveToIndexOffsetDuration) {
         
         self.animating = NO;
         
         [self endScrollingToNearestView];
         
-        CGFloat delta = self.currentOffset - (_moveToIndexOffsetStartValue + _moveToIndexOffsetDelta);
+        CGFloat delta = self.currentOffset - (self.moveToIndexOffsetStartValue + self.moveToIndexOffsetDelta);
         
         [self scrollContentByValue:delta];
     }
     // otherwise, calculate how much we should be scrolling our content by
     else {
-        CGFloat delta = [self easeInOutWithCurrentTime:currentTime start:_moveToIndexOffsetStartValue change:_moveToIndexOffsetDelta duration:_moveToIndexOffsetDuration] - self.currentOffset;
+        CGFloat delta = [self easeInOutWithCurrentTime:currentTime start:self.moveToIndexOffsetStartValue change:self.moveToIndexOffsetDelta duration:self.moveToIndexOffsetDuration] - self.currentOffset;
         
         [self scrollContentByValue:delta];
     }
@@ -436,7 +448,7 @@ static CGFloat const Friction = 0.9f;
     CGFloat delta = center.x - closestView.center.x;
     
     if (fabs(delta) > 1) {
-        _velocity = 0;
+        self.velocity = 0;
         [self endDeceleration];
         [self beginScrollingWithOffsetDelta:delta];
     }
@@ -485,8 +497,8 @@ static CGFloat const Friction = 0.9f;
         self.dragging = YES;
         
         // reset the last point to where we start from.
-        _lastTouchPoint = point;
-        _velocity = 0;
+        self.lastTouchPoint = point;
+        self.velocity = 0;
         
         [self endDeceleration];
         [self endScrollingToNearestView];
@@ -512,9 +524,9 @@ static CGFloat const Friction = 0.9f;
         UITouch *touch = [touches anyObject];
         CGPoint point = [touch locationInView:self.view];
         
-        if (fabsf(_velocity) < 1.f) {
+        if (fabsf(self.velocity) < 1.f) {
             // tap action
-            _velocity = 0.f;
+            self.velocity = 0.f;
             
             [self selectViewAtPoint:point];
         }
