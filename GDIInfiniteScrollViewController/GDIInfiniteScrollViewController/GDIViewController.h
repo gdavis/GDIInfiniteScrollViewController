@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GDIInfiniteScrollViewController.h"
 
-@interface GDIViewController : UIViewController <GDIInfiniteScrollViewControllerDataSource>
+@interface GDIViewController : UIViewController <GDIInfiniteScrollViewControllerDataSource, GDIInfiniteScrollViewControllerDelegate>
 
 @property (strong, nonatomic) GDIInfiniteScrollViewController *scrollViewController;
 

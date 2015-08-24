@@ -7,11 +7,34 @@
 //
 
 #import "GDIInfiniteScrollViewController.h"
-#import "UIView+GDIAdditions.h"
 
-#define kAnimationInterval 1.f/60.f
+
+static CGFloat const AnimationInterval = 1.f/60.f;
+static CGFloat const Friction = 0.9f;
+
+
+#pragma mark - UIVIew Additions
+
+@interface UIView (GDIAdditions)
+
+@property (nonatomic) CGFloat frameLeft;
+@property (nonatomic) CGFloat frameRight;
+@property (nonatomic) CGFloat frameBottom;
+@property (nonatomic) CGFloat frameTop;
+@property (nonatomic) CGFloat frameHeight;
+@property (nonatomic) CGFloat frameWidth;
+@property (nonatomic) CGPoint frameOrigin;
+
+@end
+
+
+#pragma mark - GDIInfiniteScrollViewController Private Interface
 
 @interface GDIInfiniteScrollViewController()
+
+@property (assign, nonatomic, readwrite, getter=isDragging) BOOL dragging;
+@property (assign, nonatomic, readwrite, getter=isAnimating) BOOL animating;
+
 @property (nonatomic) NSUInteger numberOfViews;
 @property (nonatomic) CGFloat velocity;
 @property (nonatomic) CGPoint lastTouchPoint;
@@ -21,62 +44,50 @@
 @property (nonatomic) NSUInteger indexOfRightView;
 @property (strong, nonatomic) NSTimer *decelerationTimer;
 
-- (void)setDefaults;
-- (void)setDataSourceProperties;
-- (void)buildViews;
-
-- (void)beginScrollingToNearestView;
-- (void)endScrollingToNearestView;
-- (void)selectViewAtPoint:(CGPoint)point;
-
-- (void)beginDeceleration;
-- (void)endDeceleration;
-- (void)handleDecelerateTick;
-
-- (void)updateVisibleViews;
-- (void)scrollContentByValue:(CGFloat)value;
-- (void)trackTouchPoint:(CGPoint)point;
-
-- (NSUInteger)indexOfPrevView;
-- (NSUInteger)indexOfNextView;
-
-- (NSUInteger)adjustedCircularIndex:(NSInteger)index withCount:(NSUInteger)count;
+@property (strong, nonatomic) NSDate *moveToIndexStartTime;
+@property (strong, nonatomic) NSTimer *moveToIndexTimer;
+@property (nonatomic) CGFloat moveToIndexOffsetStartValue;
+@property (nonatomic) CGFloat moveToIndexOffsetDelta;
+@property (nonatomic) CGFloat moveToIndexOffsetDuration;
 
 @end
 
 
-@implementation GDIInfiniteScrollViewController
-@synthesize dataSource, delegate, friction;
+#pragma mark - GDIInfiniteScrollViewController Implementation
 
-@synthesize numberOfViews = _numberOfViews;
-@synthesize velocity = _velocity;
-@synthesize lastTouchPoint = _lastTouchPoint;
-@synthesize currentOffset = _currentOffset;
-@synthesize currentViews = _currentViews;
-@synthesize indexOfLeftView = _indexOfLeftView;
-@synthesize indexOfRightView = _indexOfRightView;
-@synthesize decelerationTimer = _decelerationTimer;
+
+@implementation GDIInfiniteScrollViewController
+
 
 - (id)initWithDataSource:(NSObject <GDIInfiniteScrollViewControllerDataSource> *)ds
 {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
-        dataSource = ds;
+        [self commonInit];
+        _dataSource = ds;
     }
     return self;
 }
 
-- (void)didReceiveMemoryWarning
+- (instancetype)initWithCoder:(NSCoder *)coder
 {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
 }
+
+
+- (void)commonInit
+{
+    _scrollsToSelectedViewCenter = YES;
+    _friction = Friction;
+}
+
 
 #pragma mark - View lifecycle
 
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView
 {
     UIView *view = [[UIView alloc] initWithFrame:CGRectZero];
@@ -89,36 +100,32 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [self reloadData];
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-}
 
 #pragma mark - Getters / Setters
 
 - (void)setDataSource:(NSObject<GDIInfiniteScrollViewControllerDataSource> *)ds
 {
-    dataSource = ds;
+    _dataSource = ds;
     [self reloadData];
 }
 
 
 #pragma mark - Setup Methods
 
-- (void)setDefaults
+- (void)resetState
 {
     _currentOffset = 0;
     _velocity = 0;
-    self.friction = .95f;
 }
 
 
 - (void)setDataSourceProperties
 {
-    _numberOfViews = [dataSource numberOfViewsForInfiniteScrollViewController:self];
+    _numberOfViews = [self.dataSource numberOfViewsForInfiniteScrollViewController:self];
 }
 
 
@@ -126,13 +133,17 @@
 {
     _currentViews = [NSMutableArray array];
     
-    CGFloat currentWidth = 0;
     int i;
-    for (i=0; i < _numberOfViews && currentWidth < self.view.frameWidth; i++) {
+    CGFloat currentWidth = 0;
+    CGFloat viewFrameWidth = CGRectGetWidth(self.view.frame);
+    for (i=0; i < _numberOfViews && currentWidth < viewFrameWidth; i++) {
         
-        UIView *view = [dataSource infiniteScrollViewController:self viewForIndex:i];
-        view.frameLeft = currentWidth;
-        currentWidth += view.frameWidth;
+        UIView *view = [self viewForIndex:i];
+        CGRect viewFrame = view.frame;
+        viewFrame.origin.x += currentWidth;
+        view.frame = viewFrame;
+        
+        currentWidth += CGRectGetWidth(view.frame);
         [_currentViews addObject:view];
         [self.view addSubview:view];
     }
@@ -146,7 +157,7 @@
 
 - (void)reloadData
 {
-    [self setDefaults];
+    [self resetState];
     [self setDataSourceProperties];
     [self buildViews];
 }
@@ -165,6 +176,21 @@
     [self updateVisibleViews];
 }
 
+
+- (void)scrollToNearestRowWithAnimation:(BOOL)animate
+{
+    if (animate) {
+        [self beginScrollingToNearestView];
+    }
+    else {
+        CGPoint center = [self.view.superview convertPoint:self.view.center toView:self.view];
+        UIView *closestView = [self viewClosestToCenter];
+        CGFloat distance = closestView.center.x - center.x;
+        [self scrollContentByValue:distance];
+    }
+}
+
+
 - (void)trackTouchPoint:(CGPoint)point
 {
     CGFloat delta = point.x - _lastTouchPoint.x;
@@ -179,16 +205,14 @@
 - (void)updateVisibleViews
 {
     // remove views that are too far left
-    UIView *view = [_currentViews objectAtIndex:0];
+    UIView *view = [_currentViews firstObject];
     while (view.frameRight < 0) {
         
         [_currentViews removeObject:view];
         [view removeFromSuperview];
         self.indexOfLeftView = [self adjustedCircularIndex:self.indexOfLeftView+1 withCount:_numberOfViews];
         
-        view = [_currentViews objectAtIndex:0];
-        
-        
+        view = [_currentViews firstObject];
     }
     
     // remove views that are too far right
@@ -203,12 +227,12 @@
     }
     
     // add views to fill the left
-    view = [_currentViews objectAtIndex:0];
+    view = [_currentViews firstObject];
     while (view.frameLeft > 0) {
         
         NSUInteger viewIndex = [self indexOfPrevView];
         
-        UIView *newView = [dataSource infiniteScrollViewController:self viewForIndex:viewIndex];
+        UIView *newView = [self viewForIndex:viewIndex];
         newView.frameRight = view.frameLeft;
         
         [self.view addSubview:newView];
@@ -224,7 +248,7 @@
         
         NSUInteger viewIndex = [self indexOfNextView];
         
-        UIView *newView = [dataSource infiniteScrollViewController:self viewForIndex:viewIndex];
+        UIView *newView = [self viewForIndex:viewIndex];
         newView.frameLeft = view.frameRight;
         
         [self.view addSubview:newView];
@@ -233,6 +257,34 @@
         self.indexOfRightView = viewIndex;
         view = newView;
     }
+    
+    [self updateSelectedIndex];
+}
+
+
+- (void)updateSelectedIndex
+{
+    if (self.isDragging || self.isAnimating) {
+        return;
+    }
+    
+    // determine what the selected index is
+    UIView *viewClosestToCenter = [self viewClosestToCenter];
+    if (self.selectedIndex != viewClosestToCenter.tag) {
+        self.selectedIndex = viewClosestToCenter.tag;
+        
+        if ([self.delegate respondsToSelector:@selector(infiniteScrollViewController:didSelectViewAtIndex:)]) {
+            [self.delegate infiniteScrollViewController:self didSelectViewAtIndex:self.selectedIndex];
+        }
+    }
+}
+
+
+- (UIView *)viewForIndex:(NSUInteger)index
+{
+    UIView *view = [self.dataSource infiniteScrollViewController:self viewForIndex:index];
+    view.tag = index;
+    return view;
 }
 
 
@@ -265,7 +317,7 @@
 - (void)beginDeceleration
 {
     [_decelerationTimer invalidate];
-    _decelerationTimer = [NSTimer scheduledTimerWithTimeInterval:kAnimationInterval target:self selector:@selector(handleDecelerateTick) userInfo:nil repeats:YES];
+    _decelerationTimer = [NSTimer scheduledTimerWithTimeInterval:AnimationInterval target:self selector:@selector(handleDecelerateTick) userInfo:nil repeats:YES];
 }
 
 - (void)endDeceleration
@@ -280,7 +332,10 @@
     
     if ( fabsf(_velocity) < .1f) {
         [self endDeceleration];
-//        [self scrollToNearestRowWithAnimation:YES];
+        
+        if (self.scrollsToSelectedViewCenter) {
+            [self scrollToNearestRowWithAnimation:YES];
+        }
     }
     else {
         [self scrollContentByValue:_velocity];
@@ -292,26 +347,142 @@
 
 - (void)beginScrollingToNearestView
 {
+    CGPoint center = [self.view.superview convertPoint:self.view.center toView:self.view];
+    UIView *closestView = [self viewClosestToCenter];
+    CGFloat delta = center.x - closestView.center.x;
     
+    if (fabs(delta) > 1) {
+        _velocity = 0;
+        [self endDeceleration];
+        [self beginScrollingWithOffsetDelta:delta];
+    }
+    else {
+        [self scrollContentByValue:delta];
+    }
+}
+
+
+- (void)beginScrollingWithOffsetDelta:(CGFloat)delta
+{
+    self.animating = YES;
+    
+    CGFloat targetOffset = self.currentOffset + delta;
+    CGFloat currentOffset = self.currentOffset;
+    
+    _moveToIndexOffsetDelta = targetOffset - currentOffset;
+    _moveToIndexOffsetStartValue = currentOffset;
+    _moveToIndexStartTime = [NSDate date];
+    _moveToIndexOffsetDuration = [[_moveToIndexStartTime dateByAddingTimeInterval:.666f] timeIntervalSinceDate:_moveToIndexStartTime];
+    
+    [_moveToIndexTimer invalidate];
+    _moveToIndexTimer = [NSTimer scheduledTimerWithTimeInterval:AnimationInterval target:self selector:@selector(handleMoveToIndexTick) userInfo:nil repeats:YES];
 }
 
 
 - (void)endScrollingToNearestView
 {
-    
+    [_moveToIndexTimer invalidate];
+    _moveToIndexTimer = nil;
 }
+
+
+- (void)handleMoveToIndexTick
+{
+    CGFloat currentTime = fabs([_moveToIndexStartTime timeIntervalSinceNow]);
+    
+    // stop scrolling if we are past our duration
+    if (currentTime >= _moveToIndexOffsetDuration) {
+        
+        self.animating = NO;
+        
+        [self endScrollingToNearestView];
+        
+        CGFloat delta = self.currentOffset - (_moveToIndexOffsetStartValue + _moveToIndexOffsetDelta);
+        
+        [self scrollContentByValue:delta];
+    }
+    // otherwise, calculate how much we should be scrolling our content by
+    else {
+        CGFloat delta = [self easeInOutWithCurrentTime:currentTime start:_moveToIndexOffsetStartValue change:_moveToIndexOffsetDelta duration:_moveToIndexOffsetDuration] - self.currentOffset;
+        
+        [self scrollContentByValue:delta];
+    }
+}
+
+
+#pragma mark - Easing
+
+- (CGFloat)easeInOutWithCurrentTime:(CGFloat)t start:(CGFloat)b change:(CGFloat)c duration:(CGFloat)d
+{
+    if (t==0) {
+        return b;
+    }
+    if (t==d) {
+        return b+c;
+    }
+    if ((t/=d/2) < 1) {
+        return c/2 * powf(2, 10 * (t-1)) + b;
+    }
+    return c/2 * (-powf(2, -10 * --t) + 2) + b;
+}
+
+
+#pragma mark - User Tap Selection
 
 - (void)selectViewAtPoint:(CGPoint)point
 {
+    UIView *closestView = [self viewClosestToPoint:point];
+    CGPoint center = [self.view.superview convertPoint:self.view.center toView:self.view];
+    CGFloat delta = center.x - closestView.center.x;
     
+    if (fabs(delta) > 1) {
+        _velocity = 0;
+        [self endDeceleration];
+        [self beginScrollingWithOffsetDelta:delta];
+    }
+    else {
+        [self scrollContentByValue:delta];
+    }
 }
 
+
+#pragma mark - View Finding Helpers
+
+- (UIView *)viewClosestToCenter
+{
+    CGPoint center = [self.view.superview convertPoint:self.view.center toView:self.view];
+    return [self viewClosestToPoint:center];
+}
+
+
+- (UIView *)viewClosestToPoint:(CGPoint)point
+{
+    UIView *closestView = nil;
+    CGFloat closestViewDistanceToCenter = CGFLOAT_MAX;
+    
+    for (UIView *view in self.currentViews) {
+        
+        CGFloat deltaX = view.center.x - point.x;
+        
+        if (closestView == nil || fabsf(deltaX) < fabsf(closestViewDistanceToCenter)) {
+            closestView = view;
+            closestViewDistanceToCenter = deltaX;
+        }
+    }
+    
+    return closestView;
+}
+
+
+#pragma mark - Touch Handling
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     if ([touches count] == 1) {
         UITouch *touch = [touches anyObject];
         CGPoint point = [touch locationInView:self.view];
+        
+        self.dragging = YES;
         
         // reset the last point to where we start from.
         _lastTouchPoint = point;
@@ -336,12 +507,15 @@
 {
     if ([touches count] == 1) {
         
+        self.dragging = NO;
+        
         UITouch *touch = [touches anyObject];
         CGPoint point = [touch locationInView:self.view];
         
         if (fabsf(_velocity) < 1.f) {
             // tap action
             _velocity = 0.f;
+            
             [self selectViewAtPoint:point];
         }
         else {
@@ -353,9 +527,102 @@
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-
+    [self touchesEnded:touches withEvent:event];
 }
-
 
 @end
 
+
+
+#pragma mark - UIVIew Additions
+
+
+@implementation UIView (GDIAdditions)
+@dynamic frameLeft;
+@dynamic frameRight;
+@dynamic frameBottom;
+@dynamic frameTop;
+@dynamic frameWidth;
+@dynamic frameHeight;
+@dynamic frameOrigin;
+
+#pragma mark - Frame Accessors
+
+
+- (CGFloat)frameLeft
+{
+    return self.frame.origin.x;
+}
+
+- (void)setFrameLeft:(CGFloat)frameLeft
+{
+    self.frame = CGRectMake(frameLeft, self.frameTop, self.frameWidth, self.frameHeight);
+}
+
+
+- (CGFloat)frameRight
+{
+    return self.frame.origin.x + self.frame.size.width;
+}
+
+- (void)setFrameRight:(CGFloat)frameRight
+{
+    self.frame = CGRectMake(frameRight - self.frameWidth, self.frameTop, self.frameWidth, self.frameHeight);
+}
+
+
+- (CGFloat)frameBottom
+{
+    return self.frame.origin.y + self.frame.size.height;
+}
+
+- (void)setFrameBottom:(CGFloat)frameBottom
+{
+    self.frame = CGRectMake(self.frameLeft, frameBottom - self.frameHeight, self.frameWidth, self.frameHeight);
+}
+
+
+- (CGFloat)frameTop
+{
+    return self.frame.origin.y;
+}
+
+- (void)setFrameTop:(CGFloat)frameTop
+{
+    self.frame = CGRectMake(self.frameLeft, frameTop, self.frameWidth, self.frameHeight);
+}
+
+
+- (CGFloat)frameWidth
+{
+    return self.frame.size.width;
+}
+
+- (void)setFrameWidth:(CGFloat)frameWidth
+{
+    self.frame = CGRectMake(self.frameLeft, self.frameTop, frameWidth, self.frameHeight);
+}
+
+
+- (CGFloat)frameHeight
+{
+    return self.frame.size.height;
+}
+
+- (void)setFrameHeight:(CGFloat)frameHeight
+{
+    self.frame = CGRectMake(self.frameLeft, self.frameTop, self.frameWidth, frameHeight);
+}
+
+
+- (CGPoint)frameOrigin
+{
+    return self.frame.origin;
+}
+
+- (void)setFrameOrigin:(CGPoint)frameOrigin
+{
+    self.frame = CGRectMake(frameOrigin.x, frameOrigin.y, self.frameWidth, self.frameHeight);
+}
+
+@end

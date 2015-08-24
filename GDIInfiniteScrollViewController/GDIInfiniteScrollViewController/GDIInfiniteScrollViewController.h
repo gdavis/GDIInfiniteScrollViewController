@@ -12,21 +12,26 @@
 
 @interface GDIInfiniteScrollViewController : UIViewController
 
-@property (weak, nonatomic) NSObject <GDIInfiniteScrollViewControllerDataSource> *dataSource;
-@property (weak, nonatomic) NSObject <GDIInfiniteScrollViewControllerDelegate> *delegate;
+@property (weak, nonatomic) IBOutlet id <GDIInfiniteScrollViewControllerDataSource> dataSource;
+@property (weak, nonatomic) IBOutlet id <GDIInfiniteScrollViewControllerDelegate> delegate;
 @property (nonatomic) CGFloat friction;
+@property (assign, nonatomic) BOOL scrollsToSelectedViewCenter;
+@property (assign, nonatomic) NSInteger selectedIndex; // always the view closest to center
+@property (assign, nonatomic, readonly, getter=isDragging) BOOL dragging;
+@property (assign, nonatomic, readonly, getter=isAnimating) BOOL animating;
 
 - (id)initWithDataSource:(NSObject <GDIInfiniteScrollViewControllerDataSource> *)dataSource;
-
 - (void)reloadData;
 
 @end
 
 
-@protocol GDIInfiniteScrollViewControllerDataSource
+@protocol GDIInfiniteScrollViewControllerDataSource <NSObject>
 - (UIView *)infiniteScrollViewController:(GDIInfiniteScrollViewController *)controller viewForIndex:(NSUInteger)index;
 - (NSUInteger)numberOfViewsForInfiniteScrollViewController:(GDIInfiniteScrollViewController *)controller;
 @end
 
-@protocol GDIInfiniteScrollViewControllerDelegate
+@protocol GDIInfiniteScrollViewControllerDelegate <NSObject>
+// TODO:(grant) Add methods to respond to scroll events
+- (void)infiniteScrollViewController:(GDIInfiniteScrollViewController *)controller didSelectViewAtIndex:(NSInteger)index;
 @end

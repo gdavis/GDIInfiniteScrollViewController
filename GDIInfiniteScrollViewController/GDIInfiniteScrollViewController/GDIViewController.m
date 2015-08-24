@@ -26,6 +26,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
     
     self.scrollViewController = [[GDIInfiniteScrollViewController alloc] initWithDataSource:self];
+    self.scrollViewController.delegate = self;
     self.scrollViewController.view.frame = CGRectMake(100, 400, self.view.frame.size.width-200, 100);
     [self.view addSubview:self.scrollViewController.view];
 }
@@ -70,6 +71,12 @@
 - (NSUInteger)numberOfViewsForInfiniteScrollViewController:(GDIInfiniteScrollViewController *)controller
 {
     return 10;
+}
+
+
+- (void)infiniteScrollViewController:(GDIInfiniteScrollViewController *)controller didSelectViewAtIndex:(NSInteger)index
+{
+    NSLog(@"Selected index changed to: %@", @(index));
 }
 
 
